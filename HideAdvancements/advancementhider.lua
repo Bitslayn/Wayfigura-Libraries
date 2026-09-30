@@ -13,11 +13,7 @@ function events.chat_receive_message(_, raw)
 
 	-- Look for and hide advancements in chat
 
-	local should_hide =
-		comp.translate == "chat.wayfarer_core.achievement.advancement"
-		or comp.translate == "chat.wayfarer_core.achievement.achievement"
-
-	if should_hide then
+	if comp.translate:find("chat.wayfarer_core.achievement") then
 		return false
 	end
 end
