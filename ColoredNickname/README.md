@@ -1,3 +1,6 @@
+<img width="624" height="208" alt="image" src="https://github.com/user-attachments/assets/66f14d81-7eaa-4f26-92c5-dd2a1700bfa5" />
+
+
 # Description
 
 This script allows you to color your nickname in the Wayfarer game chat. It does this by modifying incoming chat messages to color the nickname portion of the message.
