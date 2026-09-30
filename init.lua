@@ -2,3 +2,4 @@
 
 require("./ColoredNickname/colorname")
 require("./HideAdvancements/advancementhider")
+require("./BackpackFix/backpack")
