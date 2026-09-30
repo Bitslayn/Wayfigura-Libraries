@@ -13,7 +13,7 @@ function events.chat_receive_message(_, raw)
 
 	-- Look for and hide advancements in chat
 
-	if comp.translate:find("chat.wayfarer_core.achievement") then
+	if comp.translate and comp.translate:find("chat.wayfarer_core.achievement") then
 		return false
 	end
 end
