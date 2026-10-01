@@ -61,6 +61,9 @@ function events.tick()
 
 	backpack:setNbt("armor_stand", toJson({
 		Invisible = true,
-		ArmorItems = { {}, {}, { id = "backpacks:backpack", count = 1, components = item.tag }, {} },
+		ArmorItems = { {}, {}, { id = "backpacks:backpack", count = 1, components = {
+			["vanity:style"] = item.tag["vanity:style"],
+			["minecraft:dyed_color"] = item.tag["minecraft:dyed_color"],
+		} }, {} },
 	})):visible(true)
 end
