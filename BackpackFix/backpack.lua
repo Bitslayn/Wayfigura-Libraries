@@ -48,25 +48,22 @@ function events.entity_init()
 
 			local item = player:getItem(5)
 
-			-- Hide backpack model if no longer wearing backpack
+			-- Set backpack model only if a backpack is worn
 
-			if not item or item.id ~= "backpacks:backpack" then
+			if item and item.id == "backpacks:backpack" then
+				backpack:setNbt("armor_stand", toJson({
+					Invisible = true,
+					ArmorItems = { {}, {}, {
+						id = "backpacks:backpack",
+						components = {
+							["vanity:style"] = item.tag["vanity:style"],
+							["minecraft:dyed_color"] = item.tag["minecraft:dyed_color"],
+						},
+					}, {} },
+				})):visible(true)
+			else
 				backpack:visible(false)
-				return
 			end
-
-			-- Set backpack model to worn backpack item
-
-			backpack:setNbt("armor_stand", toJson({
-				Invisible = true,
-				ArmorItems = { {}, {}, {
-					id = "backpacks:backpack",
-					components = {
-						["vanity:style"] = item.tag["vanity:style"],
-						["minecraft:dyed_color"] = item.tag["minecraft:dyed_color"],
-					},
-				}, {} },
-			})):visible(true)
 
 			events.tick:remove(tick)
 		end

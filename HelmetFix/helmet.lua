@@ -44,25 +44,22 @@ function events.entity_init()
 
 			local item = player:getItem(6)
 
-			-- Hide helmet model if no longer wearing a helmet
+			-- Set helmet model to worn helmet item if one is worn
 
-			if not item or not item:isArmor() then
+			if item and item:isArmor() then
+				helmet:setNbt("armor_stand", toJson({
+					Invisible = true,
+					ArmorItems = { {}, {}, {}, {
+						id = item.id,
+						components = {
+							["vanity:style"] = item.tag["vanity:style"],
+							["minecraft:dyed_color"] = item.tag["minecraft:dyed_color"],
+						},
+					} },
+				})):visible(true)
+			else
 				helmet:visible(false)
-				return
 			end
-
-			-- Set helmet model to worn helmet item
-
-			helmet:setNbt("armor_stand", toJson({
-				Invisible = true,
-				ArmorItems = { {}, {}, {}, {
-					id = item.id,
-					components = {
-						["vanity:style"] = item.tag["vanity:style"],
-						["minecraft:dyed_color"] = item.tag["minecraft:dyed_color"],
-					},
-				} },
-			})):visible(true)
 
 			events.tick:remove(tick)
 		end
