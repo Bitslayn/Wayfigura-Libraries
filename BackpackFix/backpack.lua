@@ -43,6 +43,8 @@ function events.entity_init()
 	end
 
 	function events.on_play_sound()
+		if events.tick:getRegisteredCount("await_backpack") > 0 then return end
+
 		local function tick()
 			-- Get worn backpack item
 
@@ -67,6 +69,6 @@ function events.entity_init()
 
 			events.tick:remove(tick)
 		end
-		events.tick:register(tick)
+		events.tick:register(tick, "await_backpack")
 	end
 end

@@ -39,6 +39,8 @@ function events.entity_init()
 	end
 
 	function events.on_play_sound()
+		if events.tick:getRegisteredCount("await_helmet") > 0 then return end
+
 		local function tick()
 			-- Get worn helmet item
 
@@ -63,6 +65,6 @@ function events.entity_init()
 
 			events.tick:remove(tick)
 		end
-		events.tick:register(tick)
+		events.tick:register(tick, "await_helmet")
 	end
 end
