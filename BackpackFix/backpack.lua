@@ -62,9 +62,12 @@ function events.entity_init()
 							["minecraft:dyed_color"] = item.tag["minecraft:dyed_color"],
 						},
 					}, {} },
-				})):visible(true)
+				}))
 			else
-				backpack:visible(false)
+				backpack:setNbt("armor_stand", toJson({
+					Invisible = true,
+					ArmorItems = { {}, {}, {}, {} },
+				}))
 			end
 
 			events.tick:remove(tick)

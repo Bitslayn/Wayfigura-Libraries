@@ -58,9 +58,12 @@ function events.entity_init()
 							["minecraft:dyed_color"] = item.tag["minecraft:dyed_color"],
 						},
 					} },
-				})):visible(true)
+				}))
 			else
-				helmet:visible(false)
+				helmet:setNbt("armor_stand", toJson({
+					Invisible = true,
+					ArmorItems = { {}, {}, {}, {} },
+				}))
 			end
 
 			events.tick:remove(tick)
