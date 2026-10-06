@@ -9,6 +9,8 @@ Github: https://github.com/Bitslayn/Wayfigura-Libraries/blob/main/HelmetFix
 ]]
 
 function events.entity_init()
+	-- Find helmet model
+
 	local head, found = models, false
 
 	---Runs recursion through all ModelParts, stopping when the head is found
@@ -29,24 +31,31 @@ function events.entity_init()
 
 	local helmet = head:newEntity("helmet")
 
-	local function render()
+	-- Update helmet offsets
+
+	if head:getParentType() == "Head" then
+		function events.render()
+			helmet:matrix(matrices.mat4()
+				-- Fixes offset
+
+				* matrices.translate4(0, -23, 0)
+				* matrices.yRotation4(180)
+
+				-- Fixes crouching, must be ran in render
+
+				* matrices.translate4(vanilla_model.HEAD:getOriginPos())
+			)
+		end
+	else
 		helmet:matrix(matrices.mat4()
 			-- Fixes offset
 
 			* matrices.translate4(0, -23, 0)
 			* matrices.yRotation4(180)
-
-			-- Fixes crouching, must be ran in render
-
-			* matrices.translate4(vanilla_model.HEAD:getOriginPos())
 		)
 	end
 
-	if head:getParentType() == "Head" then
-		events.render:register(render)
-	else
-		render()
-	end
+	-- Get helmet item
 
 	function events.on_play_sound()
 		if events.tick:getRegisteredCount("await_helmet") > 0 then return end
