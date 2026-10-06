@@ -17,7 +17,7 @@ function events.entity_init()
 		if found then return end
 		if part:getType() == "GROUP" then
 			if part:getParentType():find("^Helmet") then
-				head, found = part, true
+				head, found = part:getParent() --[[@as ModelPart]], true
 			else
 				for _, child in pairs(part:getChildren()) do
 					find_head(child)
