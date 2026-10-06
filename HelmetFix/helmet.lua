@@ -29,7 +29,7 @@ function events.entity_init()
 
 	local helmet = head:newEntity("helmet")
 
-	function events.render()
+	local function render()
 		helmet:matrix(matrices.mat4()
 			-- Fixes offset
 
@@ -40,6 +40,12 @@ function events.entity_init()
 
 			* matrices.translate4(vanilla_model.HEAD:getOriginPos())
 		)
+	end
+
+	if head:getParentType() == "Head" then
+		events.render:register(render)
+	else
+		render()
 	end
 
 	function events.on_play_sound()
