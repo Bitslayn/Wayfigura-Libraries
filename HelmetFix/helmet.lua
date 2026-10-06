@@ -33,8 +33,12 @@ function events.entity_init()
 		helmet:matrix(matrices.mat4()
 			-- Fixes offset
 
-			* matrices.translate4(0, -24, 0)
+			* matrices.translate4(0, -23, 0)
 			* matrices.yRotation4(180)
+
+			-- Fixes crouching, must be ran in render
+
+			* matrices.translate4(vanilla_model.HEAD:getOriginPos())
 		)
 	end
 
