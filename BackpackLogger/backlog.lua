@@ -92,53 +92,57 @@ function events.tick()
 
 		-- Store last contents by slot
 
-		---@type table<integer, string>
+		---@type {id: string, count: integer, components: table?}[]
 		local last = {}
 		for i = 1, #last_contents do
 			local slot = last_contents[i].slot + 1
-			last[slot] = last_contents[i].item.id ..
-			"\0" .. last_contents[i].item.count .. "\0\1" .. toJson(last_contents[i].item.components or {}) .. "\2"
+			last[slot] = last_contents[i].item
 			marked[slot] = true
 		end
 
 		-- Store current contents by slot
 
-		---@type table<integer, string>
+		---@type {id: string, count: integer, components: table?}[]
 		local curr = {}
 		for i = 1, #contents do
 			local slot = contents[i].slot + 1
-			curr[slot] = contents[i].item.id .. "\0" .. contents[i].item.count .. "\0\1" .. toJson(contents[i].item.components or {}) .. "\2"
+			curr[slot] = contents[i].item
 			marked[slot] = true
 		end
 
 		-- Compare slots
 		for slot in pairs(marked) do
-			local last_id, last_count, last_components = string.match(last[slot] or "", "(.*)\0(.*)\0(.*)")
-			local curr_id, curr_count, curr_components = string.match(curr[slot] or "", "(.*)\0(.*)\0(.*)")
+			local last_item = last[slot] or {}
+			local curr_item = curr[slot] or {}
 
-			if last[slot] ~= curr[slot] then
-				if last[slot] and curr[slot] then
+			if last_item.id ~= curr_item.id then
+				if last_item.id and curr_item.id then
 					-- Item modified
-					if last_id == curr_id then
+					if last_item.id == curr_item.id then
 						-- Item count changed
-						last_count = tonumber(last_count)
-						curr_count = tonumber(curr_count)
-
-						if last_count < curr_count then
-							log_changes(curr_id .. curr_components .. " increased by " .. curr_count - last_count .. " in slot " .. slot)
+						if last_item.count < curr_item.count then
+							log_changes(curr_item.id .. "\1" .. toJson(curr_item.components or {}) .. "\2" ..
+								" increased by " .. curr_item.count - last_item.count ..
+								" in slot " .. slot)
 						else
-							log_changes(curr_id .. curr_components .. " decreased by " .. last_count - curr_count .. " in slot " .. slot)
+							log_changes(curr_item.id .. "\1" .. toJson(curr_item.components or {}) .. "\2" ..
+								" decreased by " .. last_item.count - curr_item.count ..
+								" in slot " .. slot)
 						end
 					else
 						-- Item replaced
-						log_changes(last_count .. "x " .. last_id .. last_components .. " replaced with " .. curr_count .. "x " .. curr_id .. curr_components .. " in slot " .. slot)
+						log_changes(last_item.count .. "x " .. last_item.id .. "\1" .. toJson(last_item.components or {}) .. "\2" ..
+							" replaced with " .. curr_item.count .. "x " .. curr_item.id .. "\1" .. toJson(curr_item.components or {}) .. "\2" ..
+							" in slot " .. slot)
 					end
-				elseif last[slot] then
+				elseif last_item.id then
 					-- Item removed
-					log_changes(last_count .. "x " .. last_id .. last_components .. " removed from slot " .. slot)
+					log_changes(last_item.count .. "x " .. last_item.id .. "\1" .. toJson(last_item.components or {}) .. "\2" ..
+						" removed from slot " .. slot)
 				else
 					-- Item added
-					log_changes(curr_count .. "x " .. curr_id .. curr_components .. " added to slot " .. slot)
+					log_changes(curr_item.count .. "x " .. curr_item.id .. "\1" .. toJson(curr_item.components or {}) .. "\2" ..
+						" added to slot " .. slot)
 				end
 			end
 		end
