@@ -8,6 +8,8 @@ FOX's Backpack Logger
 Github: https://github.com/Bitslayn/Wayfigura-Libraries/blob/main/BackpackLogger
 ]]
 
+if not host:isHost() then return end
+
 ---@type string?, table[]?
 local last_stack, last_contents
 
