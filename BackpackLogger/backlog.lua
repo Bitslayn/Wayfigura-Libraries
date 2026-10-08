@@ -36,12 +36,16 @@ local function log_changes(text)
 		local substring = text:sub(markers[i], markers[i + 1] - 1)
 		if substring:find(":") then
 			-- Item json
-			local item = world.newItem(substring)
-			extra[#extra + 1] = {
-				text = item:getName(),
-				color = rarity_colors[item:getRarity()],
-				hoverEvent = { contents = { id = item.id, components = parseJson(substring:match("\1(.*)\2")) }, action = "show_item" },
-			}
+			local ok, item = pcall(world.newItem, substring)
+			if ok then
+				extra[#extra + 1] = {
+					text = item:getName(),
+					color = rarity_colors[item:getRarity()],
+					hoverEvent = { contents = { id = item.id, components = parseJson(substring:match("\1(.*)\2")) }, action = "show_item" },
+				}
+			else
+				extra[#extra + 1] = { text = substring:match("(.*)\1"), color = "white" }
+			end
 		else
 			-- Normal json
 			extra[#extra + 1] = { text = substring }
@@ -55,7 +59,8 @@ end
 function events.tick()
 	-- Try running every quarter second
 
-	if world.getTime() % 5 ~= 0 then return end
+	if world.getTime() % 100 ~= 0 then return end
+	sounds:playSound("minecraft:block.note_block.banjo", player:getPos())
 
 	-- Check if host is wearing a backpack
 	-- If a backpack isn't being worn, stop running and clear the last stack
