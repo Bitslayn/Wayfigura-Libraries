@@ -131,14 +131,14 @@ function events.tick()
 						end
 					else
 						-- Item replaced
-						log_changes(last_id .. last_components .. " replaced with " .. curr_id .. curr_components .. " in slot " .. slot)
+						log_changes(last_count .. "x " .. last_id .. last_components .. " replaced with " .. curr_count .. "x " .. curr_id .. curr_components .. " in slot " .. slot)
 					end
 				elseif last[slot] then
 					-- Item removed
-					log_changes(last_id .. last_components .. " removed from slot " .. slot)
+					log_changes(last_count .. "x " .. last_id .. last_components .. " removed from slot " .. slot)
 				else
 					-- Item added
-					log_changes(curr_id .. curr_components .. " added to slot " .. slot)
+					log_changes(curr_count .. "x " .. curr_id .. curr_components .. " added to slot " .. slot)
 				end
 			end
 		end
