@@ -59,8 +59,7 @@ end
 function events.tick()
 	-- Try running every quarter second
 
-	if world.getTime() % 100 ~= 0 then return end
-	sounds:playSound("minecraft:block.note_block.banjo", player:getPos())
+	if world.getTime() % 5 ~= 0 then return end
 
 	-- Check if host is wearing a backpack
 	-- If a backpack isn't being worn, stop running and clear the last stack
