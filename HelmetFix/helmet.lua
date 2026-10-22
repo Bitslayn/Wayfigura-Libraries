@@ -29,6 +29,8 @@ function events.entity_init()
 	end
 	find_head(models)
 
+	if not head.HelmetPivot then return end
+
 	local helmet = head:newEntity("helmet")
 
 	function events.render()
@@ -53,6 +55,7 @@ function events.entity_init()
 				-- Fixes crouching, must be ran in render
 
 				* matrices.translate4(vanilla_model.HEAD:getOriginPos())
+				* matrices.translate4(head.HelmetPivot:getPivot() - head:getPivot())
 			)
 		end
 	else
@@ -61,6 +64,7 @@ function events.entity_init()
 
 			* matrices.translate4(0, -23, 0)
 			* matrices.yRotation4(180)
+			* matrices.translate4(head.HelmetPivot:getPivot() - head:getPivot())
 		)
 	end
 
