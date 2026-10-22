@@ -57,18 +57,31 @@ local function log_changes(text)
 end
 
 function events.tick()
+	if last_stack or last_contents then
+		-- Check if host is wearing a backpack
+		-- If a backpack isn't being worn, stop running and clear the last stack
+
+		local item = player:getItem(5)
+		if not item or (item.id ~= "wayward:backpack" and item.id ~= "wayward:rucksack") then
+			last_stack, last_contents = nil, nil
+			return
+		end
+
+		-- Override, make sure the current player isn't inside a backpack
+
+		local screen = host:getScreen()
+		if screen and screen:find("BackpackScreen") then
+			last_stack, last_contents = nil, nil
+			return
+		end
+	end
+
 	-- Try running every quarter second
 
 	if world.getTime() % 5 ~= 0 then return end
 
-	-- Check if host is wearing a backpack
-	-- If a backpack isn't being worn, stop running and clear the last stack
-
 	local item = player:getItem(5)
-	if not item or item.id ~= "backpacks:backpack" then
-		last_stack, last_contents = nil, nil
-		return
-	end
+	if not item or (item.id ~= "wayward:backpack" and item.id ~= "wayward:rucksack") then return end
 
 	-- Get the stack of the backpack on this tick
 
@@ -77,7 +90,7 @@ function events.tick()
 	-- Check if the stack hasn't been stored before
 	-- If it hasn't then store it and wait for the next quarter second
 
-	if not last_stack then
+	if not (last_stack and last_contents) then
 		last_stack, last_contents = stack, item.tag["minecraft:container"]
 		return
 	end
