@@ -18,8 +18,8 @@ function events.entity_init()
 	local function find_head(part)
 		if found then return end
 		if part:getType() == "GROUP" then
-			if part:getParentType():find("^Helmet") then
-				head, found = part:getParent() --[[@as ModelPart]], true
+			if part:getParentType() == "HelmetPivot" then
+				head, found = part, true
 			else
 				for _, child in pairs(part:getChildren()) do
 					find_head(child)
@@ -28,8 +28,6 @@ function events.entity_init()
 		end
 	end
 	find_head(models)
-
-	if not head.HelmetPivot then return end
 
 	local helmet = head:newEntity("helmet")
 
@@ -55,7 +53,6 @@ function events.entity_init()
 				-- Fixes crouching, must be ran in render
 
 				* matrices.translate4(vanilla_model.HEAD:getOriginPos())
-				* matrices.translate4(head.HelmetPivot:getPivot() - head:getPivot())
 			)
 		end
 	else
@@ -64,7 +61,6 @@ function events.entity_init()
 
 			* matrices.translate4(0, -23, 0)
 			* matrices.yRotation4(180)
-			* matrices.translate4(head.HelmetPivot:getPivot() - head:getPivot())
 		)
 	end
 

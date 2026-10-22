@@ -7,4 +7,4 @@ This script allows you to render modded helmet armors on your avatar. It is inte
 # Setup
 
 - Download and install the script to your avatar
-- Make sure you have either a helmet item pivot or a helmet pivot in your head
+- Make sure you have a helmet pivot in your head
