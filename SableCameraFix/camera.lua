@@ -10,11 +10,15 @@ Github: https://github.com/Bitslayn/Wayfigura-Libraries/blob/main/SableCameraFix
 
 if not host:isHost() then return end
 
+-- Disable this script if FFF is loaded
+
+if client.isModLoaded("ferrets_figura_functions") then return end
+
 function events.world_render(delta)
 	if not player:isLoaded() then return end
 
 	local vehicle = player:getVehicle()
-	local is_sable = vehicle and vehicle:getPos():length() > 25000000
+	local is_sable = vehicle and vehicle:getPos():lengthSquared() > 25000000
 	local is_backwards = renderer:isCameraBackwards()
 
 	-- Sourced from KingRoboLizard's snippet
