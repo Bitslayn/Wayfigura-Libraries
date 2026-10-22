@@ -31,6 +31,15 @@ function events.entity_init()
 
 	local helmet = head:newEntity("helmet")
 
+	function events.render()
+		local vehicle = player:getVehicle()
+		if not vehicle then
+			helmet:visible(true)
+		elseif vehicle:getPos():length() > 25000000 then
+			helmet:visible(false)
+		end
+	end
+
 	-- Update helmet offsets
 
 	if head:getParentType() == "Head" then
