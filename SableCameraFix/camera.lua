@@ -18,7 +18,7 @@ function events.world_render(delta)
 	if not player:isLoaded() then return end
 
 	local vehicle = player:getVehicle()
-	local is_sable = vehicle and vehicle:getPos():lengthSquared() > 25000000
+	local is_sable = vehicle and vehicle:getPos():lengthSquared() > 20000000
 	local is_backwards = renderer:isCameraBackwards()
 
 	-- Sourced from KingRoboLizard's snippet

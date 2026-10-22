@@ -35,7 +35,7 @@ function events.entity_init()
 		local vehicle = player:getVehicle()
 		if not vehicle then
 			helmet:visible(true)
-		elseif vehicle:getPos():lengthSquared() > 25000000 then
+		elseif vehicle:getPos():lengthSquared() > 20000000 then
 			helmet:visible(false)
 		end
 	end
