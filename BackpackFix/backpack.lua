@@ -8,6 +8,8 @@ FOX's Backpack Fix
 Github: https://github.com/Bitslayn/Wayfigura-Libraries/blob/main/BackpackFix
 ]]
 
+if not client.isModLoaded("wayfarer_core") then return end
+
 function events.tick()
 	local item = player:getItem(5)
 	local is_backpack = item and (item.id == "wayward:backpack" or item.id == "wayward:rucksack")

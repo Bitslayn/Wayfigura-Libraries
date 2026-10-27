@@ -8,6 +8,8 @@ FOX's Wayfarer Colored Nicknames
 Github: https://github.com/Bitslayn/Wayfigura-Libraries/blob/main/ColoredNickname
 ]]
 
+if not client.isModLoaded("wayfarer_core") then return end
+
 if not host:isHost() then return end
 
 local uuids_cache = {}

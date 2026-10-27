@@ -8,6 +8,8 @@ FOX's Wayfarer Advancement Hider
 Github: https://github.com/Bitslayn/Wayfigura-Libraries/blob/main/HideAdvancements
 ]]
 
+if not client.isModLoaded("wayfarer_core") then return end
+
 if not host:isHost() then return end
 
 function events.chat_receive_message(_, raw)

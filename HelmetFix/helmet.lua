@@ -8,6 +8,8 @@ FOX's Helmet Fix
 Github: https://github.com/Bitslayn/Wayfigura-Libraries/blob/main/HelmetFix
 ]]
 
+if not client.isModLoaded("wayfarer_core") then return end
+
 function events.entity_init()
 	-- Find helmet model
 

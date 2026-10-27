@@ -8,6 +8,8 @@ FOX's Sable Camera Fix
 Github: https://github.com/Bitslayn/Wayfigura-Libraries/blob/main/SableCameraFix
 ]]
 
+if not client.isModLoaded("wayfarer_core") then return end
+
 if not host:isHost() then return end
 
 -- Disable this script if FFF is loaded

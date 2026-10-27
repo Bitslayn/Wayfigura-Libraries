@@ -8,6 +8,8 @@ FOX's Backpack Logger
 Github: https://github.com/Bitslayn/Wayfigura-Libraries/blob/main/BackpackLogger
 ]]
 
+if not client.isModLoaded("wayfarer_core") then return end
+
 if not host:isHost() then return end
 
 ---@type string?, table[]?
