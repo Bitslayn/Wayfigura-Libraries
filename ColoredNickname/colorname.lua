@@ -55,6 +55,7 @@ function events.chat_receive_message(_, raw)
 	-- Attempt to get the uuid when only the username is known
 
 	local name = comp.with[1].insertion
+	if not name then return end
 	local uuid = get_uuid(name)
 	if not uuid then return fetch_uuid(name) end
 
