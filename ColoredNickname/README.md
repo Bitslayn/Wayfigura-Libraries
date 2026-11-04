@@ -4,6 +4,8 @@
 
 This script allows you to color your nickname in the Wayfarer game chat. It does this by modifying incoming chat messages to color the nickname portion of the message.
 
+You must store your nickname as well as the color you want your nickname to be.
+
 # Setup
 
 - Download and install the script to your avatar
@@ -12,6 +14,7 @@ This script allows you to color your nickname in the Wayfarer game chat. It does
 
 ```lua
 avatar:store("nick_color", "#ffffff")
+avatar:store("nickname", "Your Nickname")
 ```
 
 # Important
