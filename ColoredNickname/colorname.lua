@@ -10,40 +10,44 @@ Github: https://github.com/Bitslayn/Wayfigura-Libraries/blob/main/ColoredNicknam
 
 if not client.isModLoaded("wayfarer_core") then return end
 
-if not host:isHost() then return end
+local colors = {}
 
-local uuids_cache = {}
+-- Initialization
 
----Synchronously gets the uuid from cache or from loaded players
----@param name string
-local function get_uuid(name)
-	if uuids_cache[name] then return uuids_cache[name] end
+local set_target
+avatar:store("colorname$auth", function()
+	return set_target
+end)
 
-	-- Attempts to get the uuid from loaded players
+avatar:store("colorname$set", function(uuid, nick, color)
+	if world.avatarVars()[uuid]["colorname$auth"]() ~= avatar:getUUID() then return end
+	if type(nick) ~= "string" then return end
+	if type(color) ~= "string" then return end
 
-	local plr = world.getPlayers()[name]
-	local uuid = plr and plr:getUUID()
-	uuids_cache[name] = uuid
+	colors[nick] = color
+end)
 
-	return uuid
-end
+avatar:store("colorname$sync", function()
+	local vars, uuid = player:getVariable(), player:getUUID()
 
----Asynchronously fetches the uuid from the username abusing skull NBT autofill
----@param name string
-local function fetch_uuid(name)
-	local skull = world.newItem(string.format("player_head{SkullOwner:%s}", name))
+	set_target = client.getViewer():getUUID()
+	client.getViewer():getVariable()["colorname$set"](uuid, vars.nickname, vars.nick_color)
+	set_target = nil
+end)
 
-	local function tick()
-		-- Read UUID provided to us by the game from the skull
-
-		local i1, i2, i3, i4 = skull:toStackString():match("%[I;(%-?%d+),(%-?%d+),(%-?%d+),(%-?%d+)%]")
-		if not i1 then return end
-		uuids_cache[name] = client.intUUIDToString(i1, i2, i3, i4)
-
-		events.tick:remove(tick)
+local function post_init()
+	for _, vars in pairs(world.avatarVars()) do
+		pcall(vars["colorname$sync"])
 	end
-	events.tick:register(tick)
 end
+
+local function wait()
+	post_init()
+	events.tick:remove(wait)
+end
+events.tick:register(wait)
+
+-- Chat messages
 
 function events.chat_receive_message(_, raw)
 	local comp = parseJson(raw)
@@ -54,18 +58,11 @@ function events.chat_receive_message(_, raw)
 
 	-- Attempt to get the uuid when only the username is known
 
-	local name = comp.with[1].insertion
-	if not name then return end
-	local uuid = get_uuid(name)
-	if not uuid then return fetch_uuid(name) end
-
-	-- Attempt to get the sender's avatar vars
-
-	local vars = world.avatarVars()[uuid]
-	if not vars then return end
+	local nick = comp.with[1].insertion
+	if not nick then return end
 
 	-- Attempt to color the nickname
 
-	comp.with[1].color = vars.nick_color or vars.color
+	comp.with[1].color = colors[nick]
 	return toJson(comp)
 end
