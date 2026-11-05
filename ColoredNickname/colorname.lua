@@ -20,8 +20,7 @@ avatar:store("colorname$auth", function()
 end)
 
 avatar:store("colorname$set", function(uuid, nick, color)
-	local vars = world.avatarVars()[uuid]
-	if vars["colorname$auth"]() ~= avatar:getUUID() then return end
+	if world.avatarVars()[uuid]["colorname$auth"]() ~= avatar:getUUID() then return end
 	if type(nick) ~= "string" then return end
 	if type(color) ~= "string" then return end
 
@@ -30,20 +29,19 @@ end)
 
 local function post_init()
 	pcall(function()
-		local viewer = client.getViewer()
-		local vars, uuid = viewer:getVariable(), viewer:getUUID()
+		local vars, uuid = player:getVariable(), player:getUUID()
 
-		set_target = uuid
-		vars["colorname$set"](uuid, vars.nickname, vars.nick_color)
+		set_target = client.getViewer():getUUID()
+		client.getViewer():getVariable()["colorname$set"](uuid, vars.nickname, vars.nick_color)
 		set_target = nil
 	end)
 end
 
 local function wait()
 	post_init()
-	events.tick:remove(wait)
+	events.world_tick:remove(wait)
 end
-events.tick:register(wait)
+events.world_tick:register(wait)
 
 -- Chat messages
 
