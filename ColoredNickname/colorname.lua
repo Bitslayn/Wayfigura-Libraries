@@ -43,9 +43,9 @@ end
 
 local function wait()
 	post_init()
-	events.world_tick:remove(wait)
+	events.tick:remove(wait)
 end
-events.world_tick:register(wait)
+events.tick:register(wait)
 
 -- Chat messages
 
