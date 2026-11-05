@@ -27,14 +27,18 @@ avatar:store("colorname$set", function(uuid, nick, color)
 	colors[nick] = color
 end)
 
-local function post_init()
-	pcall(function()
-		local vars, uuid = player:getVariable(), player:getUUID()
+avatar:store("colorname$sync", function()
+	local vars, uuid = player:getVariable(), player:getUUID()
 
-		set_target = client.getViewer():getUUID()
-		client.getViewer():getVariable()["colorname$set"](uuid, vars.nickname, vars.nick_color)
-		set_target = nil
-	end)
+	set_target = client.getViewer():getUUID()
+	client.getViewer():getVariable()["colorname$set"](uuid, vars.nickname, vars.nick_color)
+	set_target = nil
+end)
+
+local function post_init()
+	for _, vars in pairs(world.avatarVars()) do
+		pcall(vars["colorname$sync"])
+	end
 end
 
 local function wait()
